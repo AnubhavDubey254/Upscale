@@ -1,3 +1,6 @@
+NumPy
+Pandas
 Flask
 Flask-CORS
 Flask-SQLAlchemy
+Pillow

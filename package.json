@@ -1,18 +1,18 @@
 {
-  "name": "fullstack-upscale",
+  "name": "upscale",
   "version": "1.0.0",
   "description": "Vite/React and Flask Upscale App",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
-    "start-frontend": "npm run dev --prefix frontend",
-    "start-backend": "cd backend && python app.py"
-  },
+  "start": "concurrently \"npm run start-frontend\" \"npm run start-backend\"",
+  "start-frontend": "npm run dev --prefix frontend",
+  "start-backend": "cd backend && .venv\\Scripts\\activate.bat && python app.py"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "baseline-browser-mapping": "^2.8.28",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "baseline-browser-mapping": "^2.8.28"
   }
 }
