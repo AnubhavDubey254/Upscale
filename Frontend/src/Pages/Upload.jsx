@@ -39,6 +39,7 @@ function Upload() {
             // 2. Make the real API POST request to your Flask endpoint
             const response = await fetch('http://127.0.0.1:5000/api/upload', {
                 method: 'POST',
+                credentials: 'include',
                 body: formData, 
             });
 

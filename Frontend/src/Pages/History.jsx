@@ -1,84 +1,148 @@
-import React, { useState, useEffect } from "react";
-import "./History.css";
+import React, { useState, useEffect } from 'react';
+import { Trash2 } from 'lucide-react'; // Import trash icon
+import './History.css';
 
-function History() {
-  const [history, setHistory] = useState([
-    { id: 1, src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop&crop=face", title: "Upscaled Portrait" },
-    { id: 2, src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=500&fit=crop", title: "Landscape Enhanced" },
-    { id: 3, src: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=500&fit=crop", title: "AI Restored Photo" },
-    { id: 4, src: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&h=500&fit=crop", title: "Old Memory Fixed" },
-    { id: 1, src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop&crop=face", title: "Upscaled Portrait" },
-     { id: 2, src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=500&fit=crop", title: "Landscape Enhanced" },
-  ]);
-
-  const [isVisible, setIsVisible] = useState(false);
+const History = () => {
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    setIsVisible(true);
+    fetchHistory();
   }, []);
 
+  const fetchHistory = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/history', {
+        credentials: 'include' 
+      });
+
+      if (response.status === 401) {
+        setError("Please log in to view your history.");
+        setLoading(false);
+        return;
+      }
+
+      if (!response.ok) throw new Error("Failed to fetch history");
+
+      const data = await response.json();
+      setHistory(data);
+    } catch (err) {
+      setError("Could not load history. Is the server running?");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // NEW: Delete Handler
+  const handleDelete = async (fileId) => {
+    if (!window.confirm("Are you sure you want to delete this image? This cannot be undone.")) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/history/${fileId}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+
+        if (response.ok) {
+            // Optimistically remove from UI
+            setHistory(prevHistory => prevHistory.filter(item => item.id !== fileId));
+        } else {
+            alert("Failed to delete the file.");
+        }
+    } catch (err) {
+        console.error("Delete failed:", err);
+        alert("Error occurred while deleting.");
+    }
+  };
+
+  const getDownloadLink = (uniqueId) => {
+    return `http://127.0.0.1:5000/api/download/${uniqueId}`;
+  };
+
+  const getPreviewLink = (uniqueId) => {
+    return `http://127.0.0.1:5000/api/view/${uniqueId}`;
+  };
+
   return (
-    <div  id ="History" className="history-container">
-      {/* Background decoration */}
-      <div className="bg-shapes">
-        <div className="shape shape-1"></div>
-        <div className="shape shape-2"></div>
-        <div className="shape shape-3"></div>
-      </div>
-
-      <div className={`content-wrapper ${isVisible ? 'visible' : ''}`}>
-        <h2 className="history-title animate-slide-down">
-          <span className="title-emoji">🖼️</span>
-         <h1 className="main">your Image History</h1>
-         </h2>
+    <div id="History" className="history-container">
+      <div className="history-box">
+        <h1 className="history-title">📂 Your Enhancement History</h1>
         
-        <p className="history-subtitle animate-fade-in">
-          All your previously enhanced images are saved here.
-        </p>
+        {loading && <p className="status-text">Loading your files...</p>}
+        
+        {error && (
+          <div className="error-box">
+            <p>{error}</p>
+          </div>
+        )}
 
-        <div className="history-grid">
-          {history.map((item, index) => (
-            <div 
-              key={item.id} 
-              className="history-card animate-scale-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="card-inner">
-                <div className="image-wrapper">
-                  <img src={item.src} alt={item.title} className="history-img" />
-                  <div className="image-overlay"></div>
+        {!loading && !error && history.length === 0 && (
+          <p className="empty-text">You haven't uploaded any files yet.</p>
+        )}
+
+        {!loading && !error && history.length > 0 && (
+          <div className="history-grid">
+            {history.map((item) => (
+              <div key={item.id} className="history-card">
+                
+                <div className="card-preview">
+                  <img 
+                    src={getPreviewLink(item.unique_id)} 
+                    alt={item.original_filename}
+                    onError={(e) => {e.target.src = 'https://placehold.co/600x400?text=No+Preview'}} 
+                  />
                 </div>
-                <div className="history-overlay">
-                  <div className="overlay-content">
-                    <p className="overlay-title">{item.title}</p>
-                    <div className="overlay-buttons">
-                      <button className="btn-primary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                          <polyline points="7,10 12,15 17,10"/>
-                          <line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Download
+
+                <div className="card-content">
+                  <div className="card-header">
+                    <span className="file-name" title={item.original_filename}>
+                      {item.original_filename}
+                    </span>
+                    <span className={`status-badge ${item.status.toLowerCase()}`}>
+                      {item.status}
+                    </span>
+                  </div>
+                  
+                  <div className="card-body">
+                    <p className="file-date">📅 {item.date}</p>
+                  </div>
+                  
+                  {/* Updated Footer with Delete Button */}
+                  <div className="card-footer">
+                    {item.status === 'COMPLETED' ? (
+                      <a 
+                        href={getDownloadLink(item.unique_id)} 
+                        className="download-btn"
+                      >
+                        ⬇️ Download Result
+                      </a>
+                    ) : (
+                      <button disabled className="processing-btn">
+                        {item.status === 'FAILED' ? '❌ Failed' : '⏳ Processing...'}
                       </button>
-                      <button className="btn-secondary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                          <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                        View
-                      </button>
-                    </div>
+                    )}
+                    
+                    {/* Delete Button */}
+                    <button 
+                        className="delete-btn" 
+                        onClick={() => handleDelete(item.id)}
+                        title="Delete Image"
+                    >
+                        <Trash2 size={20} />
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
-
-      
     </div>
   );
-}
+};
 
 export default History;

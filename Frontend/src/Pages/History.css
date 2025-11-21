@@ -1,376 +1,165 @@
-
-        .history-container {
-          min-height: 100vh;
-        
-           background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-          padding: 2rem;
-          position: relative;
-          overflow: hidden;
-        }
-        .main{
-            color: aliceblue;
-            
-        }
-        
-
-        .bg-shapes {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          z-index: 1;
-        }
-
-        .shape {
-          position: absolute;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.1);
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .shape-1 {
-          width: 120px;
-          height: 120px;
-          top: 10%;
-          right: 15%;
-          animation-delay: 0s;
-        }
-
-        .shape-2 {
-          width: 80px;
-          height: 80px;
-          top: 70%;
-          right: 20%;
-          animation-delay: 2s;
-        }
-
-        .shape-3 {
-          width: 100px;
-          height: 100px;
-          bottom: 20%;
-          left: 10%;
-          animation-delay: 4s;
-        }
-
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0px) scale(1);
-          }
-          50% {
-            transform: translateY(-20px) scale(1.1);
-          }
-        }
-
-        .content-wrapper {
-          position: relative;
-          z-index: 2;
-          max-width: 1200px;
-          margin: 0 auto;
-          opacity: 0;
-          transform: translateY(30px);
-          transition: all 0.8s ease;
-          
-        }
-
-        .content-wrapper.visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        .history-title {
-          font-size: 3rem;
-          font-weight: 800;
-          color: white;
-          text-align: center;
-          margin-bottom: 1rem;
-          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-          animation: slideDown 0.8s ease;
-        }
-
-        .title-emoji {
-          display: inline-block;
-          margin-right: 1rem;
-         animation: bounce 1s ease-in-out infinite;
-         
-        }
-
-        @keyframes bounce {
-          0%, 20%, 50%, 80%, 100% {
-            transform: translateY(0);
-          }
-          40% {
-            transform: translateY(-8px);
-          }
-          60% {
-            transform: translateY(-4px);
-          }
-        }
-
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .history-subtitle {
-          font-size: 1.2rem;
-          color: rgba(255, 255, 255, 0.9);
-          text-align: center;
-          margin-bottom: 3rem;
-          animation: fadeIn 1s ease 0.3s both;
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .history-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 2rem;
-          margin-top: 2rem;
-        }
-
-        .history-card {
-          opacity: 0;
-          transform: translateY(50px) scale(0.8);
-          animation: scaleUp 0.6s ease forwards;
-          transition: transform 0.3s ease;
-        }
-
-        .history-card:hover {
-          transform: translateY(-10px) scale(1.05);
-        }
-
-        @keyframes scaleUp {
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-
-        .card-inner {
-          background: rgba(255, 255, 255, 0.95);
-          border-radius: 20px;
-          overflow: hidden;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          position: relative;
-        }
-
-        .card-inner:hover {
-          box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
-          border-color: rgba(255, 255, 255, 0.4);
-        }
-
-        .image-wrapper {
-          position: relative;
-          aspect-ratio: 1;
-          overflow: hidden;
-        }
-
-        .history-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .card-inner:hover .history-img {
-          transform: scale(1.15);
-        }
-
-        .image-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(45deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
-        .card-inner:hover .image-overlay {
-          opacity: 1;
-        }
-
-        .history-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.8);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          opacity: 0;
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          backdrop-filter: blur(5px);
-        }
-
-        .card-inner:hover .history-overlay {
-          opacity: 1;
-        }
-
-        .overlay-content {
-          text-align: center;
-          transform: translateY(20px);
-          transition: transform 0.4s ease;
-          color: white;
-        }
-
-        .card-inner:hover .overlay-content {
-          transform: translateY(0);
-        }
-
-        .overlay-title {
-          font-size: 1.3rem;
-          font-weight: 600;
-          margin-bottom: 1.5rem;
-          color: white;
-        }
-
-        .overlay-buttons {
-          display: flex;
-          gap: 1rem;
-          justify-content: center;
-        }
-
-        .btn-primary, .btn-secondary {
-          padding: 0.8rem 1.5rem;
-          border: none;
-          border-radius: 25px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-size: 0.9rem;
-        }
-
-        .btn-primary {
-          background: linear-gradient(45deg, #667eea, #764ba2);
-          color: white;
-        }
-
-        .btn-primary:hover {
-          background: linear-gradient(45deg, #5a6fd8, #6a4190);
-          transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn-secondary {
-          background: rgba(255, 255, 255, 0.2);
-          color: white;
-          border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn-secondary:hover {
-          background: rgba(255, 255, 255, 0.3);
-          transform: translateY(-2px);
-          border-color: rgba(255, 255, 255, 0.5);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-          .history-container {
-            padding: 1rem;
-          }
-
-          .history-title {
-            font-size: 2.2rem;
-          }
-
-          .history-grid {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-          }
-
-          .overlay-buttons {
-            flex-direction: column;
-          }
-
-          .btn-primary, .btn-secondary {
-            width: 100%;
-            justify-content: center;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .history-title {
-            font-size: 1.8rem;
-          }
-
-          .history-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .card-inner {
-            border-radius: 15px;
-          }
-        }
-
-         Animation Classes for compatibility 
-        .animate-slide-down {
-          animation: slideDown 0.6s ease;
-          
-        }
-        .animate-fade-in {
-          animation: fadeIn 1s ease 0.1s both;
-        }
-
-        .animate-scale-up {
-          animation: scaleUp 0.1s ease forwards;
-        }
-
-       
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.history-container {
+  min-height: 80vh;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  background-color: #0f172a; 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.history-box {
+  width: 100%;
+  max-width: 800px;
+}
+
+.history-title {
+  text-align: center;
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.history-card {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  color: #e2e8f0;
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+}
+
+.history-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  border-color: #3b82f6;
+}
+
+.card-preview {
+  width: 100%;
+  height: 150px; 
+  background-color: #1e293b;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  transition: transform 0.3s ease;
+}
+
+.history-card:hover .card-preview img {
+  transform: scale(1.05);
+}
+
+.card-content {
+  padding: 15px; 
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 15px;
+}
+
+.file-name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.status-badge {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.status-badge.completed { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+.status-badge.pending { background: rgba(250, 204, 21, 0.2); color: #facc15; }
+.status-badge.failed { background: rgba(248, 113, 113, 0.2); color: #f87171; }
+
+.file-date {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+/* New Footer Styles to align buttons */
+.card-footer {
+  margin-top: auto; 
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.download-btn, .processing-btn {
+  flex: 1; /* Take up most space */
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.download-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  color: white;
+  transition: opacity 0.2s;
+}
+
+.download-btn:hover {
+  opacity: 0.9;
+}
+
+.processing-btn {
+  background: rgba(148, 163, 184, 0.1);
+  border: none;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Delete Button Styles */
+.delete-btn {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: scale(1.05);
+}
+
+.status-text, .empty-text, .error-box {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}

@@ -4,3 +4,5 @@ Flask
 Flask-CORS
 Flask-SQLAlchemy
 Pillow
+Flask-Login 
+Flask-Bcrypt
